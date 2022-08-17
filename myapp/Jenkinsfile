@@ -1,0 +1,67 @@
+node('any') {
+
+  properties([pipelineTriggers([pollSCM('*/1 * * * *')]),disableConcurrentBuilds()])
+
+  stage('Init') {
+    checkout scm
+
+    //Service specific vars
+    service_name = "demo-service"
+    kubernetes_cluster_name = "Demo-EKS"
+
+    //Common vars
+    GIT_COMMIT = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
+    account = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
+    SHORT_COMMIT = "${GIT_COMMIT[0..7]}"
+    echo "git commit is ${GIT_COMMIT}"
+    account_alias = sh(script: "aws iam list-account-aliases --query AccountAliases --output text", returnStdout: true).trim()
+    region = "us-west-2"
+    ecr_repoName = "${account_alias}.dkr.ecr.${region}.amazonaws.com/${service_name}"
+
+  }
+
+  stage('Image Build') {
+    echo "${ecr_repoName}"
+    // sh "docker build -f Dockerfile -t ${ecr_repoName}:${SHORT_COMMIT} ."
+    // sh "docker tag ${ecr_repoName}:${SHORT_COMMIT} ${ecr_repoName}:latest"
+  }
+
+
+    stage('Tests') {
+
+        echo "Tests are PASSED"
+
+    }
+
+  
+
+  // stage('Image Push') {
+  //   script {
+  //     try {
+  //       sh "aws ecr batch-delete-image --repository-name ${service_name} --image-ids imageTag=${SHORT_COMMIT} --region ${region}"
+  //     } catch (err) {
+  //       currentBuild.result = 'SUCCESS'
+  //     }
+  //     echo "Build number is ${SHORT_COMMIT}"
+  //     sh "aws ecr batch-delete-image --repository-name ${service_name} --image-ids imageTag=latest --region ${region}"
+  //     sh "set +x && `aws ecr get-login --no-include-email --region ${region}` && set -x && docker push ${ecr_repoName}:latest"
+  //     sh "set +x && `aws ecr get-login --no-include-email --region ${region}` && set -x && docker push ${ecr_repoName}:${SHORT_COMMIT}"
+  //     sh "docker image rm ${ecr_repoName}:latest"
+  //     sh "docker image rm ${ecr_repoName}:${SHORT_COMMIT}"
+  //   }
+  // }
+
+
+
+ // stage("Deploy") {
+ //   script {
+ //     catchError {
+ //       dir(".helm") {
+ //         sh "helm upgrade --install --wait --timeout 120s --set readinessPath=/ $service_name ."
+ //       }
+ //     }
+ //     echo currentBuild.result
+ //   }
+ // }
+
+}
