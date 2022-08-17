@@ -25,7 +25,7 @@ node {
     echo "${ecr_repoName}"
      sh "docker build -f ./Dockerfile -t ${ecr_repoName}:${SHORT_COMMIT} ."
      sh "docker tag ${ecr_repoName}:${SHORT_COMMIT} ${ecr_repoName}:latest"
-     sh "sed -i 's|MYIMAGE|${ecr_repoName}:${SHORT_COMMIT}|g' ../helm/values.yaml"
+     sh "sed -i 's|IMAGENAME|${ecr_repoName}:${SHORT_COMMIT}|g' ../helm/values.yaml"
     }
   }
 
