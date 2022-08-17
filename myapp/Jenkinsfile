@@ -25,6 +25,7 @@ node {
     echo "${ecr_repoName}"
      sh "docker build -f ./Dockerfile -t ${ecr_repoName}:${SHORT_COMMIT} ."
      sh "docker tag ${ecr_repoName}:${SHORT_COMMIT} ${ecr_repoName}:latest"
+     sh "sed -i 's|MYIMAGE|${ecr_repoName}:${SHORT_COMMIT}|g' ../helm/templates/values.yaml"
     }
   }
 
@@ -54,20 +55,21 @@ node {
       sh "docker push ${ecr_repoName}:${SHORT_COMMIT}"
       sh "docker image rm ${ecr_repoName}:latest"
       sh "docker image rm ${ecr_repoName}:${SHORT_COMMIT}"
+      
     }
   }
 
 
 
- // stage("Deploy") {
- //   script {
- //     catchError {
- //       dir(".helm") {
- //         sh "helm upgrade --install --wait --timeout 120s --set readinessPath=/ $service_name ."
- //       }
- //     }
- //     echo currentBuild.result
- //   }
- // }
+  stage("Deploy") {
+    script {
+      catchError {
+       dir("helm") {
+         sh "helm install $service_name ."
+       }
+     }
+     echo currentBuild.result
+   }
+ }
 
 }
