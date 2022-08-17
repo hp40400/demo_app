@@ -66,7 +66,7 @@ node {
       catchError {
        dir("helm") {
          sh "aws eks update-kubeconfig --region ${region} --name ${kubernetes_cluster_name}"
-         sh "helm install $service_name ."
+         sh "helm upgrade --install $service_name ."
        }
      }
      echo currentBuild.result
