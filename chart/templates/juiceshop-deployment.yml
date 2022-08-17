@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.name }}
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app: juiceshop
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: juiceshop
+  template:
+    metadata:
+      labels:
+        app: juiceshop
+    spec:
+      containers:
+      - name: juiceshop
+        image: {{ .Values.deployments.image }}
+        ports:
+        - containerPort: 3000
