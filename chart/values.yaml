@@ -1,9 +1,0 @@
-deployments:
-  name: juiceshopdeployment
-  image:  bkimminich/juice-shop
-
-services:
-  name: juiceshop
-
-namespace:
-  name: development
