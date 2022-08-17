@@ -1,4 +1,4 @@
 namespace:
   name: game-2048
-deployment:
+deployments:
   image: IMAGENAME
