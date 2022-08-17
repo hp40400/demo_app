@@ -14,9 +14,9 @@ node {
     account = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
     SHORT_COMMIT = "${GIT_COMMIT[0..7]}"
     echo "git commit is ${GIT_COMMIT}"
-    account_alias = sh(script: "aws iam list-account-aliases --query AccountAliases --output text", returnStdout: true).trim()
+   // account_alias = sh(script: "aws iam list-account-aliases --query AccountAliases --output text", returnStdout: true).trim()
     region = "us-west-2"
-    ecr_repoName = "${account_alias}.dkr.ecr.${region}.amazonaws.com/${service_name}"
+    ecr_repoName = "${account}.dkr.ecr.${region}.amazonaws.com/${service_name}"
 
   }
 
