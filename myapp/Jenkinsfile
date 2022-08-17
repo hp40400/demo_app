@@ -46,7 +46,7 @@ node {
       }
       echo "Build number is ${SHORT_COMMIT}"
       sh "aws ecr batch-delete-image --repository-name ${service_name} --image-ids imageTag=latest --region ${region}"
-      sh '$(aws ecr get-login-password --region us-west-2)'
+      sh '$(aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${ecr_repoName})'
       sh "docker push ${ecr_repoName}:latest"
       sh "docker push ${ecr_repoName}:${SHORT_COMMIT}"
       //sh "set +x && `aws ecr get-login --no-include-email --region ${region}` && set -x && docker push ${ecr_repoName}:latest"
