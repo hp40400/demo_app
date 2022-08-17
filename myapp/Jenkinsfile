@@ -1,4 +1,4 @@
-node('any') {
+node(any) {
 
   properties([pipelineTriggers([pollSCM('*/1 * * * *')]),disableConcurrentBuilds()])
 
