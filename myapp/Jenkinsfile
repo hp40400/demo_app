@@ -22,8 +22,8 @@ node {
 
   stage('Image Build') {
     echo "${ecr_repoName}"
-    // sh "docker build -f Dockerfile -t ${ecr_repoName}:${SHORT_COMMIT} ."
-    // sh "docker tag ${ecr_repoName}:${SHORT_COMMIT} ${ecr_repoName}:latest"
+     sh "docker build -f Dockerfile -t ${ecr_repoName}:${SHORT_COMMIT} ."
+     sh "docker tag ${ecr_repoName}:${SHORT_COMMIT} ${ecr_repoName}:latest"
   }
 
 
@@ -35,21 +35,21 @@ node {
 
   
 
-  // stage('Image Push') {
-  //   script {
-  //     try {
-  //       sh "aws ecr batch-delete-image --repository-name ${service_name} --image-ids imageTag=${SHORT_COMMIT} --region ${region}"
-  //     } catch (err) {
-  //       currentBuild.result = 'SUCCESS'
-  //     }
-  //     echo "Build number is ${SHORT_COMMIT}"
-  //     sh "aws ecr batch-delete-image --repository-name ${service_name} --image-ids imageTag=latest --region ${region}"
-  //     sh "set +x && `aws ecr get-login --no-include-email --region ${region}` && set -x && docker push ${ecr_repoName}:latest"
-  //     sh "set +x && `aws ecr get-login --no-include-email --region ${region}` && set -x && docker push ${ecr_repoName}:${SHORT_COMMIT}"
-  //     sh "docker image rm ${ecr_repoName}:latest"
-  //     sh "docker image rm ${ecr_repoName}:${SHORT_COMMIT}"
-  //   }
-  // }
+  stage('Image Push') {
+    script {
+      try {
+        sh "aws ecr batch-delete-image --repository-name ${service_name} --image-ids imageTag=${SHORT_COMMIT} --region ${region}"
+      } catch (err) {
+        currentBuild.result = 'SUCCESS'
+      }
+      echo "Build number is ${SHORT_COMMIT}"
+      sh "aws ecr batch-delete-image --repository-name ${service_name} --image-ids imageTag=latest --region ${region}"
+      sh "set +x && `aws ecr get-login --no-include-email --region ${region}` && set -x && docker push ${ecr_repoName}:latest"
+      sh "set +x && `aws ecr get-login --no-include-email --region ${region}` && set -x && docker push ${ecr_repoName}:${SHORT_COMMIT}"
+      sh "docker image rm ${ecr_repoName}:latest"
+      sh "docker image rm ${ecr_repoName}:${SHORT_COMMIT}"
+    }
+  }
 
 
 
