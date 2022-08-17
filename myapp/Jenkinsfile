@@ -22,7 +22,7 @@ node {
 
   stage('Image Build') {
     echo "${ecr_repoName}"
-     sh "docker build -f Dockerfile -t ${ecr_repoName}:${SHORT_COMMIT} ."
+     sh "docker build -f ./Dockerfile -t ${ecr_repoName}:${SHORT_COMMIT} ."
      sh "docker tag ${ecr_repoName}:${SHORT_COMMIT} ${ecr_repoName}:latest"
   }
 
