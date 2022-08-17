@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.name }}
+  namespace: {{ .Values.namespace.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.deployments.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployments.name }}
+    spec:
+      containers:
+      - image: MYIMAGE
+        imagePullPolicy: Always
+        name: {{ .Values.deployments.name }}
+        ports:
+        - containerPort: {{ .Values.deployments.spec.containerPort }}
+        resources:
+          limits:
+            cpu: {{ .Values.deployments.spec.cpu.limit }}
+            memory: {{ .Values.deployments.spec.memory.limit }}
+          requests:
+            cpu: {{ .Values.deployments.spec.cpu.request }}
+            memory: {{ .Values.deployments.spec.memory.request }}
+        env:
+        {{ range .Values.deployments.configMap.data }}
+        - name: {{ .name }}
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $.Values.deployments.configMap.name }}
+              key: {{ .name }}
+        {{ end }}
+        {{ range .Values.deployments.secrets.data }}
+        - name: {{ .name }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.Values.deployments.secrets.name }}
+              key: {{ .name }}
+        {{ end }}

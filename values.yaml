@@ -1,0 +1,46 @@
+namespace:
+  name: tr-ns
+deployments:
+  name: tiny-url
+  configMap:
+    name: tiny-url-configmap
+    data:
+      - name: DB_PORT
+        value: 3306
+  secrets:
+    type: Opaque
+    name: tiny-url-tr-secrets
+    data:
+      - name: DB_PASSWORD
+      - name: DB_NAME
+      - name: DB_USER
+      - name: DB_HOST
+      - name: NODE_ENV
+      - name: BUGSNAG_API_KEY
+  spec:
+    replicas:
+      min: 2
+      max: 5
+    containerPort: 8081
+    cpu:
+      request: 250m
+      limit: 500m
+    memory:
+      request: 128Mi
+      limit: 256Mi
+    scale:
+      metric: cpu
+      target: 10
+    scaleUp:
+      percentValue: 100
+      period: 15
+      stabilizationWindow: 0
+    scaleDown:
+      percentValue: 100
+      period: 15
+      stabilizationWindow: 300
+ingress:
+  scheme: internet-facing
+  healthcheck: /status
+  certificate: SSLCERT
+  waf: WAFARN

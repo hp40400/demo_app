@@ -1,0 +1,32 @@
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2beta2
+metadata:
+  name: {{ .Values.deployments.name }}
+  namespace: {{ .Values.namespace.name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.deployments.name }}
+  minReplicas: {{ .Values.deployments.spec.replicas.min }}
+  maxReplicas: {{ .Values.deployments.spec.replicas.max }}
+  metrics:
+  - type: Resource
+    resource:
+      name: {{ .Values.deployments.spec.scale.metric }}
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.deployments.spec.scale.target }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.deployments.spec.scaleDown.stabilizationWindow }}
+      policies:
+      - type: Percent
+        value: {{ .Values.deployments.spec.scaleDown.percentValue }}
+        periodSeconds: {{ .Values.deployments.spec.scaleDown.period }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.deployments.spec.scaleUp.stabilizationWindow }}
+      policies:
+      - type: Percent
+        value: {{ .Values.deployments.spec.scaleUp.percentValue }}
+        periodSeconds: {{ .Values.deployments.spec.scaleUp.period }}
