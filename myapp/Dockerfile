@@ -1,11 +1,24 @@
-FROM alpine:latest
+# Docker file pour un serveur web et le jeu 2048
 
-MAINTAINER alex <alexwhen@gmail.com> 
+# Basé sur la dernière image de nginx, https://hub.docker.com/_/nginx
+FROM nginx
 
-RUN apk --update add nginx
+# L'image est basée sur debian, les commandes apt fonctionnent
+RUN apt update
 
-#COPY 2048 /usr/share/nginx/html
+# Afin de pouvoir récupérer le code de 2048, nous avons besoin de git
+RUN apt -y install git
 
+# La commande WORKDIR permet de définir le dossier de travail
+WORKDIR /usr/share/nginx
+
+# On estime que les fichiers par défaut ne sont pas nécessaire
+RUN rm -rf html
+
+# On clone le code de l'application dans le répertoire qui est «servi» par
+# nginx, notre serveur web, qui a précédemment été supprimé
+#RUN git clone https://github.com/gabrielecirulli/2048.git /usr/share/nginx/html
+COPY 2048 /usr/share/nginx/html
+
+# On expose le port 80, port par défaut des applications web
 EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
