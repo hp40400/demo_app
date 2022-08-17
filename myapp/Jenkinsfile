@@ -51,7 +51,7 @@ node {
      // sh "`aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${ecr_repoName}` && docker push ${ecr_repoName}:latest"
      // sh "set +x && `aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${ecr_repoName}` && set -x && docker push ${ecr_repoName}:${SHORT_COMMIT}"
       sh "docker push ${ecr_repoName}:latest"
-      //sh "docker push ${ecr_repoName}:${SHORT_COMMIT}"
+      sh "docker push ${ecr_repoName}:${SHORT_COMMIT}"
       sh "docker image rm ${ecr_repoName}:latest"
       sh "docker image rm ${ecr_repoName}:${SHORT_COMMIT}"
     }
