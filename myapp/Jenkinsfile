@@ -67,6 +67,8 @@ node {
        dir("helm") {
          sh "aws eks update-kubeconfig --region ${region} --name ${kubernetes_cluster_name}"
          sh "helm upgrade --install $service_name ."
+         sh 'sleep 10'
+         sh "kubectl get ingress -n 2048-game"
        }
      }
      echo currentBuild.result
