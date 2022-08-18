@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Values.deployments.configMap.name }}
-  namespace: {{ .Values.namespace.name }}
-data:
-  {{ range .Values.deployments.configMap.data }}
-  {{ .name }} : "{{ .value }}"
-  {{ end }}
