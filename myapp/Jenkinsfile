@@ -25,7 +25,7 @@ node {
     echo "${ecr_repoName}"
      sh "docker build -f ./Dockerfile -t ${ecr_repoName}:${SHORT_COMMIT} ."
      sh "docker tag ${ecr_repoName}:${SHORT_COMMIT} ${ecr_repoName}:latest"
-     sh "sed -i 's|IMAGENAME|${ecr_repoName}:${SHORT_COMMIT}|g' ../helm/values.yaml"
+    // sh "sed -i 's|IMAGENAME|${ecr_repoName}:${SHORT_COMMIT}|g' ../helm/values.yaml"
     }
   }
 
@@ -65,10 +65,10 @@ node {
     script {
       catchError {
        dir("helm") {
-         sh "aws eks update-kubeconfig --region ${region} --name ${kubernetes_cluster_name}"
-         sh "helm upgrade --install $service_name ."
-         sh 'sleep 10'
-         sh "kubectl get ingress -n 2048-game"
+        // sh "aws eks update-kubeconfig --region ${region} --name ${kubernetes_cluster_name}"
+        // sh "helm upgrade --install $service_name ."
+        // sh 'sleep 10'
+        // sh "kubectl get ingress -n 2048-game"
        }
      }
      echo currentBuild.result
