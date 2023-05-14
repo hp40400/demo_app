@@ -11,7 +11,7 @@ node {
 
     //Common vars
     GIT_COMMIT = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
-    account = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
+    account = sh(script: "/usr/local/bin/aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
     SHORT_COMMIT = "${GIT_COMMIT[0..7]}"
     echo "git commit is ${GIT_COMMIT}"
    // account_alias = sh(script: "aws iam list-account-aliases --query AccountAliases --output text", returnStdout: true).trim()
