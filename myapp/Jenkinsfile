@@ -67,7 +67,7 @@ node {
        dir("helm") {
         sh 'ssh root@54.87.185.236 "docker stop myapp" || true'
         sh 'ssh root@54.87.185.236 "docker rm myapp" || true'
-        sh 'ssh root@54.87.185.236 "docker run -d -p 80:80 --name myapp 060017721355.dkr.ecr.us-west-2.amazonaws.com/demo-service:latest"'
+        sh 'ssh root@54.87.185.236 "docker run -d -p 80:80 --name myapp ${ecr_repoName}:latest"'
         // sh "aws eks update-kubeconfig --region ${region} --name ${kubernetes_cluster_name}"
         // sh "helm upgrade --install $service_name ."
         // sh 'sleep 10'
